@@ -22,13 +22,22 @@ return @sorted_nums;
 sub play_lotto {
   my ($num_tickets) = @_;
   my @winning_nums = pick_lotto_nums;
+  my @winning_whites = @winning_nums[0..4];
+  print "@winning_whites\n";
   for (my $i =1; $i <= $num_tickets; $i++){
     my @lotto_ticket = pick_lotto_nums;
+    my @lotto_whites = @lotto_ticket[0..4];
     my $comp = Array::Compare->new;
+    my $comp_whites = Array::Compare->new;
     if ($comp->compare(\@winning_nums, \@lotto_ticket)) {
       print "You won the jackpot!!!\n";
       print "@winning_nums and @lotto_ticket\n";
       last;
+    }
+    elsif ($comp_whites->compare(\@winning_whites, \@lotto_whites)) {
+        print "Hey you won a million dollars!!!";
+        print "@winning_nums and @lotto_ticket";
+        last;
       }
     else {
       print "@lotto_ticket doesn't match @winning_nums.\n";
@@ -36,4 +45,5 @@ sub play_lotto {
   }
 }
 
-play_lotto(2000)
+
+play_lotto(200000)
