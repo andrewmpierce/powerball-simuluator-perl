@@ -15,8 +15,9 @@ for (my $i =1; $i <= 5; $i++) {
   my $chosen_white = pop @white_nums;
   push @lotto_nums, $chosen_white;
 }
-push @lotto_nums, $random_number_red;
-print "@lotto_nums";
+my @sorted_nums = sort { $a <=> $b } @lotto_nums;
+push @sorted_nums, $random_number_red;
+print "@sorted_nums";
 }
 
 pick_lotto_nums;
