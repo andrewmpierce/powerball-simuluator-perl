@@ -33,11 +33,13 @@ sub play_lotto {
       print "You won the jackpot!!!\n";
       print "@winning_nums and @lotto_ticket\n";
       last;
+      return "jackpot";
     }
     elsif ($comp_whites->compare(\@winning_whites, \@lotto_whites)) {
         print "Hey you won a million dollars!!!";
         print "@winning_nums and @lotto_ticket";
         last;
+        return "million";
       }
     else {
       print "@lotto_ticket doesn't match @winning_nums.\n";
@@ -45,5 +47,17 @@ sub play_lotto {
   }
 }
 
+sub run_sim {
+  my ($num_trials, $num_ticks) = @_;
+  for (my $i =1; $i <= $num_trials; $i++) {
+    my $result = play_lotto($num_ticks)
+    if ($result eq "jackpot") {
+      print "It took you $i draws to win the jackpot, you purchased $num_ticks every draw\n";
+      }
+    elsif ($result eq "million") {
+      print "It took you $i draws to win a million dollars, you purchased $num_ticks every draw\n";
+    }
+  }
+}
 
-play_lotto(200000)
+run_sim(100, 200)
