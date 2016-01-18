@@ -1,0 +1,1 @@
+This is a powerball simulator written in Perl. I wanted to know the most efficient number of tickets to buy per drawing to maximize my odds of winning while spending the least amount of money per draw. 
