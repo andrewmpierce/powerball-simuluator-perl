@@ -119,7 +119,9 @@ sub run_sim {
   my $num_ticks = <STDIN>;
   print "How many drawings do you want to play for?\n";
   my $num_drawings = <STDIN>;
-  run_trials($num_drawings, $num_ticks);
+  print "Do you want to purchase the powerplay for an extra \$1 per ticket? yes/no\n";
+  my $powerplay = <STDIN>;
+  run_trials($num_drawings, $num_ticks, $powerplay);
 }
 
 run_sim;
