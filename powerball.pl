@@ -18,6 +18,16 @@ push @sorted_nums, $random_number_red;
 return @sorted_nums;
 }
 
+
+sub pick_multiplier {
+  my @multiplier_poss = (2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,5,5);
+  my @multiplier = shuffle @multiplier_poss;
+  my $chosen_multiplier = pop @multiplier;
+  return $chosen_multiplier;
+}
+
+
+
 sub check_winnings {
   my ($winning_ticket_ref, $checked_ticket_ref) = @_;
   my @winning_ticket = @{ $winning_ticket_ref };
@@ -64,14 +74,21 @@ sub check_winnings {
 
 
 sub play_lotto {
-  my ($num_tickets) = @_;
+  my ($num_tickets, $mult) = @_;
   my @winning_nums = pick_lotto_nums;
+  if ($mult eq "yes"){
+    my $multiplier = pick_multiplier;
+  }
+  else {
+    my $multiplier = 1;
+  }
   my $winnings = 0;
   for (my $i =1; $i <= $num_tickets; $i++){
     my @lotto_ticket = pick_lotto_nums;
-    $winnings = $winnings + check_winnings(\@winning_nums, \@lotto_ticket);
+    $winnings = $winnings + (check_winnings(\@winning_nums, \@lotto_ticket) * $multiplier);
   }
   print "You won $winnings dollars this drawing.\n";
+  print "The multiplier was $multiplier\n";
   return $winnings;
 }
 
@@ -84,9 +101,14 @@ sub commify {
 
 
 sub run_trials {
-  my ($num_trials, $num_ticks) = @_;
+  my ($num_trials, $num_ticks, $powerplay) = @_;
   my $total_ticks = $num_trials * $num_ticks;
-  my $money = $total_ticks * 2;
+  if ($powerplay eq "yes") {
+    my $money = $total_ticks * 3;
+  }
+  else {
+    my $money = $total_ticks * 2;
+  }
   my $total_winnings = 0;
   for (my $i =1; $i <= $num_trials; $i++) {
     print "This is drawing #$i.\n";
