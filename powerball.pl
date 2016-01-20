@@ -28,7 +28,6 @@ sub check_winnings {
   my @intersection = $comp_whites->get_intersection();
   print "The intersection is @intersection\n";
   my $in_size = @intersection;
-  #print "The in size is $in_size\n";
   if ($in_size == 5 && $winning_ticket[-1] == $checked_ticket[-1]) {
     print "You won the jackpot!!!\n";
     print "@winning_ticket and @checked_ticket\n";
@@ -70,29 +69,9 @@ sub play_lotto {
   my ($num_tickets) = @_;
   my @winning_nums = pick_lotto_nums;
   my $winnings = 0;
-
-  #my @winning_whites = @winning_nums[0..4];
   for (my $i =1; $i <= $num_tickets; $i++){
     my @lotto_ticket = pick_lotto_nums;
     $winnings = $winnings + check_winnings(\@winning_nums, \@lotto_ticket);
-    #my @lotto_whites = @lotto_ticket[0..4];
-    #my $comp = Array::Compare->new;
-    #my $comp_whites = Array::Compare->new;
-    # if ($comp->compare(\@winning_nums, \@lotto_ticket)) {
-    #   print "You won the jackpot!!!\n";
-    #   print "@winning_nums and @lotto_ticket\n";
-    #   return "jackpot";
-    #   last;
-    # }
-    # elsif ($comp_whites->compare(\@winning_whites, \@lotto_whites)) {
-    #     print "Hey you won a million dollars!!!\n";
-    #     print "@winning_nums and @lotto_ticket\n";
-    #     return "million";
-    #     last;
-    #   }
-    # else {
-    #   #print "@lotto_ticket doesn't match @winning_nums.\n";
-    # }
   }
   print "You won $winnings dollars this drawing.\n";
   return $winnings;
