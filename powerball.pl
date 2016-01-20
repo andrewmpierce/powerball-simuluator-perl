@@ -29,7 +29,7 @@ sub pick_multiplier {
 
 
 sub check_winnings {
-  my ($winning_ticket_ref, $checked_ticket_ref) = @_;
+  my ($winning_ticket_ref, $checked_ticket_ref, $multiplier) = @_;
   my @winning_ticket = @{ $winning_ticket_ref };
   my @checked_ticket = @{ $checked_ticket_ref };
   my @winning_whites = @winning_ticket[0..4];
@@ -45,26 +45,31 @@ sub check_winnings {
   elsif ($in_size == 5) {
       print "Hey you won a million dollars!!!\n";
       print "@winning_ticket and @checked_ticket\n";
-      return 1000000;
+      if ($multiplier != 1) {
+      return 2000000;
+      }
+      else {
+        return 1000000;
+      }
     }
   elsif ($in_size == 4 && $winning_ticket[-1] == $checked_ticket[-1]) {
     print "Wow you won 50K!!!\n";
-    return 50000;
+    return 50000 * $multiplier;
   }
   elsif ($in_size == 4) {
-    return 100;
+    return 100 * $multiplier;
   }
   elsif ($in_size && $winning_ticket[-1] == $checked_ticket[-1]) {
-    return 100;
+    return 100 * $multiplier;
   }
   elsif ($in_size == 3) {
-    return 7;
+    return 7 * $multiplier;
   }
   elsif ($in_size == 2 && $winning_ticket[-1] == $checked_ticket[-1]) {
-    return 7;
+    return 7 * $multiplier;
   }
   elsif ($winning_ticket[-1] == $checked_ticket[-1]) {
-    return 4;
+    return 4 * $multiplier;
   }
   else {
     return 0;
@@ -82,7 +87,7 @@ sub play_lotto {
   my $winnings = 0;
   for (my $i =1; $i <= $num_tickets; $i++){
     my @lotto_ticket = pick_lotto_nums;
-    $winnings = $winnings + (check_winnings(\@winning_nums, \@lotto_ticket) * $multiplier);
+    $winnings = $winnings + check_winnings(\@winning_nums, \@lotto_ticket, $multiplier);
   }
   print "You won $winnings dollars this drawing.\n";
   print "The multiplier was $multiplier\n";
