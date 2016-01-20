@@ -76,11 +76,9 @@ sub check_winnings {
 sub play_lotto {
   my ($num_tickets, $mult) = @_;
   my @winning_nums = pick_lotto_nums;
-  if ($mult eq "yes"){
-    my $multiplier = pick_multiplier;
-  }
-  else {
-    my $multiplier = 1;
+  my $multiplier = 1;
+  if ($mult eq "yes") {
+   $multiplier = pick_multiplier;
   }
   my $winnings = 0;
   for (my $i =1; $i <= $num_tickets; $i++){
@@ -103,16 +101,14 @@ sub commify {
 sub run_trials {
   my ($num_trials, $num_ticks, $powerplay) = @_;
   my $total_ticks = $num_trials * $num_ticks;
+  my $money = $total_ticks * 2;
   if ($powerplay eq "yes") {
-    my $money = $total_ticks * 3;
-  }
-  else {
-    my $money = $total_ticks * 2;
+    $money = $total_ticks * 3;
   }
   my $total_winnings = 0;
   for (my $i =1; $i <= $num_trials; $i++) {
     print "This is drawing #$i.\n";
-    my $result = play_lotto($num_ticks);
+    my $result = play_lotto($num_ticks, $powerplay);
     $total_winnings = $total_winnings + $result;
     if ($result >= 40000000) {
       my $jackpot_takehome = $total_winnings - $money;
@@ -143,6 +139,7 @@ sub run_sim {
   my $num_drawings = <STDIN>;
   print "Do you want to purchase the powerplay for an extra \$1 per ticket? yes/no\n";
   my $powerplay = <STDIN>;
+  chomp($powerplay);
   run_trials($num_drawings, $num_ticks, $powerplay);
 }
 
