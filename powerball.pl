@@ -128,6 +128,7 @@ sub run_trials {
       my $output4 =  "You didn't win the jackpot in $num_trials draws. You spent $money dollars on $total_ticks tickets.\n";
       print commify($output4);
       if ($final_money <= 0){
+        $final_money = $final_money * -1;
       my $output5 = "You won $total_winnings dollars. You lost $final_money dollars playing the lottery.\n";
       print commify($output5);
     }
