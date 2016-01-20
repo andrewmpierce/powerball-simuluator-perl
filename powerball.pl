@@ -1,9 +1,8 @@
 #!/usr/bin/perl
 use strict;
-use warnings;
+#use warnings;
 use List::Util qw(shuffle);
-use Array::Compare;
-
+use List::Compare;
 
 sub pick_lotto_nums {
 my @data = (1..69);
@@ -19,33 +18,84 @@ push @sorted_nums, $random_number_red;
 return @sorted_nums;
 }
 
+sub check_winnings {
+  my ($winning_ticket_ref, $checked_ticket_ref) = @_;
+  my @winning_ticket = @{ $winning_ticket_ref };
+  my @checked_ticket = @{ $checked_ticket_ref };
+  my @winning_whites = @winning_ticket[0..4];
+  my @lotto_whites = @checked_ticket[0..4];
+  my $comp_whites = List::Compare->new(\@winning_whites, \@lotto_whites);
+  my @intersection = $comp_whites->get_intersection();
+  print "The intersection is @intersection\n";
+  my $in_size = @intersection;
+  #print "The in size is $in_size\n";
+  if ($in_size == 5 && $winning_ticket[-1] == $checked_ticket[-1]) {
+    print "You won the jackpot!!!\n";
+    print "@winning_ticket and @checked_ticket\n";
+    return 40000000;
+  }
+  elsif ($in_size == 5) {
+      print "Hey you won a million dollars!!!\n";
+      print "@winning_ticket and @checked_ticket\n";
+      return 1000000;
+    }
+  elsif ($in_size && $winning_ticket[-1] == $checked_ticket[-1]) {
+    print "Wow you won 50K!!!\n";
+    #print "@winning_ticket and @checked_ticket\n";
+    return 50000;
+  }
+  elsif ($in_size == 4) {
+    return 100;
+  }
+  elsif ($in_size && $winning_ticket[-1] == $checked_ticket[-1]) {
+    return 100;
+  }
+  elsif ($in_size == 3) {
+    return 7;
+  }
+  elsif ($in_size == 2 && $winning_ticket[-1] == $checked_ticket[-1]) {
+    return 7;
+  }
+  elsif ($winning_ticket[-1] == $checked_ticket[-1]) {
+    print "YES\n";
+    return 4;
+  }
+  else {
+    return 0;
+  }
+}
+
 
 sub play_lotto {
   my ($num_tickets) = @_;
   my @winning_nums = pick_lotto_nums;
-  my @winning_whites = @winning_nums[0..4];
-  print "@winning_whites\n";
+  my $winnings = 0;
+
+  #my @winning_whites = @winning_nums[0..4];
   for (my $i =1; $i <= $num_tickets; $i++){
     my @lotto_ticket = pick_lotto_nums;
-    my @lotto_whites = @lotto_ticket[0..4];
-    my $comp = Array::Compare->new;
-    my $comp_whites = Array::Compare->new;
-    if ($comp->compare(\@winning_nums, \@lotto_ticket)) {
-      print "You won the jackpot!!!\n";
-      print "@winning_nums and @lotto_ticket\n";
-      return "jackpot";
-      last;
-    }
-    elsif ($comp_whites->compare(\@winning_whites, \@lotto_whites)) {
-        print "Hey you won a million dollars!!!\n";
-        print "@winning_nums and @lotto_ticket\n";
-        return "million";
-        last;
-      }
-    else {
-      #print "@lotto_ticket doesn't match @winning_nums.\n";
-    }
+    $winnings = $winnings + check_winnings(\@winning_nums, \@lotto_ticket);
+    #my @lotto_whites = @lotto_ticket[0..4];
+    #my $comp = Array::Compare->new;
+    #my $comp_whites = Array::Compare->new;
+    # if ($comp->compare(\@winning_nums, \@lotto_ticket)) {
+    #   print "You won the jackpot!!!\n";
+    #   print "@winning_nums and @lotto_ticket\n";
+    #   return "jackpot";
+    #   last;
+    # }
+    # elsif ($comp_whites->compare(\@winning_whites, \@lotto_whites)) {
+    #     print "Hey you won a million dollars!!!\n";
+    #     print "@winning_nums and @lotto_ticket\n";
+    #     return "million";
+    #     last;
+    #   }
+    # else {
+    #   #print "@lotto_ticket doesn't match @winning_nums.\n";
+    # }
   }
+  print "You won $winnings dollars this drawing.\n";
+  return $winnings;
 }
 
 
@@ -60,26 +110,27 @@ sub run_trials {
   my ($num_trials, $num_ticks) = @_;
   my $total_ticks = $num_trials * $num_ticks;
   my $money = $total_ticks * 2;
+  my $total_winnings = 0;
   for (my $i =1; $i <= $num_trials; $i++) {
     print "This is drawing #$i.\n";
     my $result = play_lotto($num_ticks);
-    if ($result eq "jackpot") {
-      my $output =  "It took you $i draws to win! You purchased $num_ticks tickets every draw.\n";
+    $total_winnings = $total_winnings + $result;
+    if ($result >= 40000000) {
+      my $jackpot_takehome = $total_winnings - $money;
+      my $output =  "It took you $i draws to win the jackpot! You purchased $num_ticks tickets every draw.\n";
       print commify($output);
       my $output1 =  "You purchased $total_ticks tickets for a total of $money dollars. \n";
       print commify($output1);
-      last;
-    }
-    elsif ($result eq "million") {
-      my $output2 =  "It took you $i draws to win! You purchased $num_ticks tickets every draw.\n";
-      print commify($output2);
-      my $output3 =  "You purchased $total_ticks tickets for a total of $money dollars. \n";
-      print commify($output3);
+      my $output6 = "After buying all those tickets your net result is $jackpot_takehome dollars.\n";
+      print commify($output6);
       last;
     }
     elsif ($i == $num_trials){
-      my $output4 =  "You didn't win in $num_trials draws. You spent $money dollars on $total_ticks tickets.\n";
+      my $losses = $money - $total_winnings;
+      my $output4 =  "You didn't win the jackpot in $num_trials draws. You spent $money dollars on $total_ticks tickets.\n";
       print commify($output4);
+      my $output5 = "You won $total_winnings dollars. You lost $losses dollars playing the lottery.\n";
+      print commify($output5);
     }
   }
 }
