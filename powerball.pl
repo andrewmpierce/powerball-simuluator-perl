@@ -26,7 +26,6 @@ sub check_winnings {
   my @lotto_whites = @checked_ticket[0..4];
   my $comp_whites = List::Compare->new(\@winning_whites, \@lotto_whites);
   my @intersection = $comp_whites->get_intersection();
-  print "The intersection is @intersection\n";
   my $in_size = @intersection;
   if ($in_size == 5 && $winning_ticket[-1] == $checked_ticket[-1]) {
     print "You won the jackpot!!!\n";
@@ -56,7 +55,6 @@ sub check_winnings {
     return 7;
   }
   elsif ($winning_ticket[-1] == $checked_ticket[-1]) {
-    print "YES\n";
     return 4;
   }
   else {
