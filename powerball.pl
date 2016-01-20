@@ -59,7 +59,7 @@ sub check_winnings {
   elsif ($in_size == 4) {
     return 100 * $multiplier;
   }
-  elsif ($in_size && $winning_ticket[-1] == $checked_ticket[-1]) {
+  elsif ($in_size == 3 && $winning_ticket[-1] == $checked_ticket[-1]) {
     return 100 * $multiplier;
   }
   elsif ($in_size == 3) {
@@ -136,6 +136,8 @@ sub run_trials {
         my $output5 = "You won $total_winnings dollars. You netted $final_money dollars playing the lottery.\n";
         print commify($output5);
       }
+      my $return = $total_winnings/$money;
+      print "Your return on investment is $return\n";
     }
   }
 }
