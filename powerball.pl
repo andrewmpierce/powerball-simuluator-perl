@@ -37,7 +37,7 @@ sub check_winnings {
       print "@winning_ticket and @checked_ticket\n";
       return 1000000;
     }
-  elsif ($in_size && $winning_ticket[-1] == $checked_ticket[-1]) {
+  elsif ($in_size == 4 && $winning_ticket[-1] == $checked_ticket[-1]) {
     print "Wow you won 50K!!!\n";
     #print "@winning_ticket and @checked_ticket\n";
     return 50000;
