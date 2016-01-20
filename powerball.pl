@@ -90,7 +90,6 @@ sub play_lotto {
     $winnings = $winnings + check_winnings(\@winning_nums, \@lotto_ticket, $multiplier);
   }
   print "You won $winnings dollars this drawing.\n";
-  print "The multiplier was $multiplier\n";
   return $winnings;
 }
 
@@ -125,11 +124,17 @@ sub run_trials {
       last;
     }
     elsif ($i == $num_trials){
-      my $losses = $money - $total_winnings;
+      my $final_money = $total_winnings - $money;
       my $output4 =  "You didn't win the jackpot in $num_trials draws. You spent $money dollars on $total_ticks tickets.\n";
       print commify($output4);
-      my $output5 = "You won $total_winnings dollars. You lost $losses dollars playing the lottery.\n";
+      if ($final_money <= 0){
+      my $output5 = "You won $total_winnings dollars. You lost $final_money dollars playing the lottery.\n";
       print commify($output5);
+    }
+      else {
+        my $output5 = "You won $total_winnings dollars. You netted $final_money dollars playing the lottery.\n";
+        print commify($output5);
+      }
     }
   }
 }
