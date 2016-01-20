@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use strict;
-#use warnings;
+use warnings;
 use List::Util qw(shuffle);
 use List::Compare;
 
@@ -49,7 +49,6 @@ sub check_winnings {
     }
   elsif ($in_size == 4 && $winning_ticket[-1] == $checked_ticket[-1]) {
     print "Wow you won 50K!!!\n";
-    #print "@winning_ticket and @checked_ticket\n";
     return 50000;
   }
   elsif ($in_size == 4) {
