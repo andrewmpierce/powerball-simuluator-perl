@@ -4,6 +4,9 @@ use warnings;
 use List::Util qw(shuffle);
 use List::Compare;
 
+
+#sub to pick lotto numbers. Shuffles an array of nums 1-69 and then picks the
+#last 5 as white numbers. Then picks a random powerball number.
 sub pick_lotto_nums {
 my @data = (1..69);
 my @white_nums = shuffle @data;
@@ -19,6 +22,7 @@ return @sorted_nums;
 }
 
 
+#multiplier is picked for powerplay options. Shuffles an array with multiplier options and picks last element
 sub pick_multiplier {
   my @multiplier_poss = (2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,5,5);
   my @multiplier = shuffle @multiplier_poss;
@@ -27,15 +31,18 @@ sub pick_multiplier {
 }
 
 
-
+#checks to see if a lotto ticket is a winner and returns value of winnings.
 sub check_winnings {
   my ($winning_ticket_ref, $checked_ticket_ref, $multiplier) = @_;
+  #unpacking references into arrays
   my @winning_ticket = @{ $winning_ticket_ref };
   my @checked_ticket = @{ $checked_ticket_ref };
   my @winning_whites = @winning_ticket[0..4];
   my @lotto_whites = @checked_ticket[0..4];
   my $comp_whites = List::Compare->new(\@winning_whites, \@lotto_whites);
+  #intersection is an array of shared numbers between the two givens.
   my @intersection = $comp_whites->get_intersection();
+  #length of intersection, aka how many shared white numbers
   my $in_size = @intersection;
   if ($in_size == 5 && $winning_ticket[-1] == $checked_ticket[-1]) {
     print "You won the jackpot!!!\n";
@@ -93,7 +100,7 @@ sub play_lotto {
   return $winnings;
 }
 
-
+#adds commas into large numbers for easier viewing.
 sub commify {
     my $text = reverse $_[0];
     $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
