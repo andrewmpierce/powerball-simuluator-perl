@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use List::Util qw(shuffle);
 use List::Compare;
+use Test::Simple tests => 6;
 
 
 #sub to pick lotto numbers. Shuffles an array of nums 1-69 and then picks the
@@ -162,4 +163,29 @@ sub run_sim {
   run_trials($num_drawings, $num_ticks, $powerplay);
 }
 
-run_sim;
+
+sub tests   {
+    ok( 1 + 1 == 2 );
+    my @lotto_nums = pick_lotto_nums();
+    ok(scalar @lotto_nums == 6);
+    my $mult = pick_multiplier();
+    ok($mult >= 2 && $mult <= 5);
+    my @winning_lotto = (1,2,3,4,5,6);
+    my @test_ticket_jackpot = (1,2,3,4,5,6);
+    my $test_mult = 3;
+    ok(check_winnings(\@winning_lotto, \@test_ticket_jackpot, $test_mult) == 40000000);
+    my @test_ticket_million = (1,2,3,4,5,8);
+    ok(check_winnings(\@winning_lotto, \@test_ticket_million, $test_mult) == 2000000);
+    my @losing_ticket = (10,11,12,13,14,15);
+    ok(check_winnings(\@winning_lotto, \@losing_ticket, $test_mult) == 0);
+    exit;
+}
+
+
+my $myargs = @ARGV;
+if ($myargs >= 1){
+  tests;
+}
+else {
+  run_sim;
+}
